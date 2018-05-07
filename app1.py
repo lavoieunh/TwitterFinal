@@ -2,19 +2,21 @@ import os
 import time
 import classinput
 import twttr1
-import flask
+import json
+#import flask
+from flask import Flask, request, render_template, jsonify
 
-app = flask.Flask(__name__)   # create our flask app
+app = Flask(__name__)   # create our flask app
 
-# configure Twitter API
-#3twitter = twttr1(
-#            auth=OAuth(os.environ.get('APIKEY'), os.environ.get('APISECRET'),
-#                       os.environ.get('CONSUMERKEY'), os.environ.get('CONSUMERSECRET'))
-#
-#           )
 
-@app.route('/')
-def main():
+#@app.route('/') 
+#def twitterform(): 
+#   return render_template('twitterform.html')
+
+
+
+@app.route('/', methods=['GET'])
+def landingpage():
 
     APIKEY='455215929-Exmhl2w5l1LdckIkFWRoiahwmrawltGzwWQ1Mffs'
 
@@ -30,14 +32,22 @@ def main():
     ci = classinput.UserReq()
 
     input11 = raw_input("For home timeline, type home: ")
-    input22 = raw_input("Type something to search for, no # needed")
-
-    print(ci.home_timeline(input11, client))
-    print(ci.tweet_search(input22, client))
+    input22 = raw_input("Type something to search for, no # needed: ") 
+    input33 = raw_input("Type a user to search for: ")
 
 
-#return render_template('index.html', **templateData)
+    #print(ci.home_timeline(input11, client))
+    #print(ci.tweet_search(input22, client))
+    #print(ci.user_timeline(input33, client)) 
+    inputone =  ci.user_timeline(input11, client) 
+    newinputone = json.dumps(inputone)
+    return jsonify(newinputone)  
 
-if __name__ == "__main__":
-	#app.debug = True
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    inputtwo =  ci.user_timeline(input22, client) 
+    newinputtwo = json.dumps(inputtwo)
+    return jsonify(newinputtwo)  
+
+    inputthree =  ci.user_timeline(input33, client) 
+    newinputthree = json.dumps(inputthree)
+    return jsonify(newinputthree)  
+
